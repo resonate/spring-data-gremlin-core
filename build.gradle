@@ -2,74 +2,84 @@ plugins {
     id 'org.springframework.boot' version '1.5.6.RELEASE' apply false
 }
 
-allprojects {
-    apply plugin: 'java'
-    apply plugin: 'idea'
-    apply plugin: 'org.springframework.boot'
-    apply plugin: 'eclipse'
-    apply plugin: 'maven'
-    apply plugin: 'maven-publish'
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
-    bootRepackage.enabled = false
+bootRepackage.enabled = false
 
-    sourceCompatibility = 1.8
-    version = '0.1.2-SNAPSHOT'
-    group = 'com.resonate'
+sourceCompatibility = 1.8
+version = '0.1.2-SNAPSHOT'
+group = 'com.resonate'
 
-    repositories {
-        mavenLocal()
-        maven { url 'https://repo.spring.io/libs-release' }
-        maven { url 'https://repo.spring.io/libs-snapshot' }
-        mavenCentral()
-    }
+repositories {
+    mavenLocal()
+    maven { url 'https://repo.spring.io/libs-release' }
+    maven { url 'https://repo.spring.io/libs-snapshot' }
+    mavenCentral()
+}
 
-    dependencies {
-        compile 'org.springframework.boot:spring-boot-starter'
-        compile("org.springframework:spring-tx")
-        compile('org.springframework.data:spring-data-commons:1.11.0.RELEASE')
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter'
+    compile("org.springframework:spring-tx")
+    compile('org.springframework.data:spring-data-commons:1.11.0.RELEASE')
 
-        compile('org.codehaus.groovy:groovy:1.8.9')
-        compile('com.tinkerpop.blueprints:blueprints-core:2.6.0')
-        compile('com.tinkerpop.gremlin:gremlin-java:2.6.0')
-        compile('com.tinkerpop.gremlin:gremlin-groovy:2.6.0')
+    compile('org.codehaus.groovy:groovy:1.8.9')
+    compile('com.tinkerpop.blueprints:blueprints-core:2.6.0')
+    compile('com.tinkerpop.gremlin:gremlin-java:2.6.0')
+    compile('com.tinkerpop.gremlin:gremlin-groovy:2.6.0')
 
-        compile('org.apache.commons:commons-collections4:4.0')
-        compile('org.apache.commons:commons-lang3:3.4')
-        compile('org.reflections:reflections:0.9.9-RC1')
+    compile('org.apache.commons:commons-collections4:4.0')
+    compile('org.apache.commons:commons-lang3:3.4')
+    compile('org.reflections:reflections:0.9.9-RC1')
 
-        testCompile('junit:junit:4.12')
-        testCompile('org.mockito:mockito-core:1.10.19')
-        testCompile("org.springframework:spring-test")
-    }
+    testCompile('junit:junit:4.12')
+    testCompile('org.mockito:mockito-core:1.10.19')
+    testCompile("org.springframework:spring-test")
+}
 
-    task javadocJar(type: Jar) {
-        classifier = 'javadoc'
-        from javadoc
-    }
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
 
-    task sourcesJar(type: Jar) {
-        classifier = 'sources'
-        from sourceSets.main.allSource
-    }
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
 
-    task wrapper(type: Wrapper) {
-        gradleVersion = '3.5.1'
-    }
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.5.1'
+}
 
-    artifacts {
-        archives javadocJar, sourcesJar
-    }
+artifacts {
+    archives javadocJar, sourcesJar
+}
 
-    javadoc {
-        failOnError = false
-    }
+javadoc {
+    failOnError = false
+}
 
-    publishing {
-        publications {
-            mavenJava(MavenPublication) {
-                from components.java
-            }
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
         }
     }
+}
 
+task testJar(type: Jar, dependsOn: testClasses) {
+    baseName = "test-${project.archivesBaseName}"
+    from sourceSets.test.output
+}
+
+configurations {
+    tests
+}
+
+artifacts {
+    tests testJar
 }
