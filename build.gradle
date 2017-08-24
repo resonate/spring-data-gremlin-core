@@ -11,9 +11,13 @@ apply plugin: 'maven-publish'
 
 bootRepackage.enabled = false
 
-sourceCompatibility = 1.8
-version = '0.1.2-SNAPSHOT'
-group = 'com.resonate'
+group = "com.resonate"
+if(project.hasProperty("teamcity")) {
+    version teamcity['build.number']
+} else {
+    version 'SNAPSHOT'
+}
+sourceCompatibility = "1.8"
 
 repositories {
     mavenLocal()
@@ -67,6 +71,16 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
+        }
+    }
+    repositories {
+        maven {
+            credentials {
+                username mavenUser
+                password mavenPassword
+            }
+            name "snapshots"
+            url "http://nexus/nexus/content/repositories/snapshots"
         }
     }
 }
