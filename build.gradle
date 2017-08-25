@@ -67,6 +67,12 @@ javadoc {
     failOnError = false
 }
 
+if (!project.hasProperty('mavenUser')){
+    ext.mavenUser = ''
+}
+if (!project.hasProperty('mavenPassword')){
+    ext.mavenPassword = ''
+}
 publishing {
     publications {
         mavenJava(MavenPublication) {
