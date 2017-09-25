@@ -142,7 +142,7 @@ public class GremlinTransactionManager extends AbstractPlatformTransactionManage
     protected void doCleanupAfterCompletion(Object transaction) {
         GremlinTransaction tx = (GremlinTransaction) transaction;
 
-        if (tx.getGraph() == null || graphFactory.isClosed(tx.getGraph())) {
+        if (!graphFactory.isClosed(tx.getGraph())) {
             LOGGER.debug("closing transaction, db.hashCode() = {}", tx.getGraph().hashCode());
             graphFactory.shutdown(tx.getGraph());
         }
