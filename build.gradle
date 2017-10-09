@@ -15,7 +15,7 @@ group = "com.resonate"
 if(project.hasProperty("teamcity")) {
     version teamcity['build.number']
 } else {
-    version 'SNAPSHOT'
+    version 'SNAPSHOT-1'
 }
 sourceCompatibility = "1.8"
 
@@ -29,7 +29,7 @@ repositories {
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter'
     compile("org.springframework:spring-tx")
-    compile('org.springframework.data:spring-data-commons:1.11.0.RELEASE')
+    compile('org.springframework.data:spring-data-commons')
 
     compile('org.codehaus.groovy:groovy:1.8.9')
     compile('com.tinkerpop.blueprints:blueprints-core:2.6.0')
